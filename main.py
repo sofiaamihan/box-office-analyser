@@ -15,6 +15,15 @@ from sklearn.preprocessing import RobustScaler
 from sklearn.preprocessing import StandardScaler
 import joblib
 
+# All the Models I'll be using
+from sklearn.tree import DecisionTreeRegressor
+import catboost as cb
+from sklearn.ensemble import GradientBoostingRegressor
+import lightgbm as lgb
+import xgboost as xgb
+from sklearn.ensemble import HistGradientBoostingRegressor
+from sklearn.ensemble import RandomForestRegressor
+
 # -------------------- 1. Get the Data --------------------
 # Import as variable
 df = pd.read_csv('./dataset/movie_statistic_dataset.csv')
@@ -49,8 +58,8 @@ del df['director_birth']
 del df['director_death']
 # Splitting production_date into 3 separate columns
 df['production_date'] = pd.to_datetime(df['production_date'])
-df['day'] = df['production_date'].dt.day
-df['month'] = df['production_date'].dt.month
+# df['day'] = df['production_date'].dt.day
+# df['month'] = df['production_date'].dt.month
 df['year'] = df['production_date'].dt.year
 del df ['production_date']
 # Removing Redundant Columns
