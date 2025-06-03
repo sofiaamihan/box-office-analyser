@@ -27,9 +27,9 @@ from sklearn.ensemble import RandomForestRegressor
 
 df = pd.read_csv('./dataset/movie_statistic_dataset.csv')
 
-extract = df.sample(n=2, random_state=1)
-extract.to_csv('extract.csv', index=False)
-for i in extract.index:
+deployment_extract = df.sample(n=2, random_state=1)
+deployment_extract.to_csv('deployment_extract.csv', index=False)
+for i in deployment_extract.index:
     df.drop(index=i, inplace=True)
 
 df = df.reset_index()
@@ -45,6 +45,7 @@ renamed_columns = {
     'Worldwide gross $': 'worldwide_gross' 
 }
 df.rename(renamed_columns, axis='columns', inplace=True)
+print(df['production_date'])
 
 # -------------------- 2. Visualise the Data --------------------
 
@@ -201,4 +202,4 @@ speed['CatBoost'] = np.round(time() - start, 3)
 print(f"Run time: {speed['CatBoost']}s")
 
 # -------------------- 8. Deploy the Model --------------------
-joblib.dump(model, 'trained_box_office_predictor.pkl')
+joblib.dump(model, 'trained_box_office_analyser.pkl')
