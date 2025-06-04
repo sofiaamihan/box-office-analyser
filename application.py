@@ -11,7 +11,7 @@ st.write("""
 # Box Office Analyser - Worldwide Gross $ Predictor
 This application predicts the Worldwide Gross Revenue of your movie!
 """)
-st.image('https://i.pinimg.com/736x/7e/f9/26/7ef9265637be64e75208493ec390ce2b.jpg')
+st.image('https://raw.githubusercontent.com/sofiaamihan/box-office-analyser/refs/heads/main/data/little_women.jpg?token=GHSAT0AAAAAADCZXGWVQ4HUFTPHGPBTEHRQ2CACYEQ')
 
 # -------------------- Sidebar --------------------
 st.sidebar.header('Movie Details')
