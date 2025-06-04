@@ -49,6 +49,11 @@ print(df['production_date'])
 
 # -------------------- 2. Visualise the Data --------------------
 
+news_row = df[df['genres'].str.contains('News', na=False)]
+df.drop(index=news_row.index, inplace=True)
+df = df.reset_index()
+del df['index'] 
+
 del df['movie_title']
 del df['director_name']
 del df['director_professions']
@@ -108,18 +113,14 @@ pca.fit(new)
 new_data = pd.DataFrame(pca.transform(new), columns=['pc1', 'pc2', 'pc3', 'pc4', 'pc5'])
 X_train = pd.DataFrame(X_train).join(new_data)
 
-robust_scaler = RobustScaler()
-X_test[['budget_scaled']] = robust_scaler.fit_transform(X_test[['budget']])
+X_test[['budget_scaled']] = robust_scaler.transform(X_test[['budget']])  
 X_test.drop(columns=['budget'], inplace=True)
-s_scaler = StandardScaler()
-X_test[['year_scaled']] = s_scaler.fit_transform(X_test[['year']])
+X_test[['year_scaled']] = s_scaler.transform(X_test[['year']])  
 X_test.drop(columns=['year'], inplace=True)
-new2 = X_test['genres'].str.get_dummies(sep=',')
-del X_test['genres']
-pca = PCA(n_components=5)
-pca.fit(new2)
-new_data2 = pd.DataFrame(pca.transform(new2), columns=['pc1', 'pc2', 'pc3', 'pc4', 'pc5'])
-X_test = pd.DataFrame(X_test).join(new_data2)
+genre_test = X_test['genres'].str.get_dummies(sep=',')
+genre_pca_test = pd.DataFrame(pca.transform(genre_test), columns=['pc1', 'pc2', 'pc3', 'pc4', 'pc5'])
+X_test.drop(columns=['genres'], inplace=True)
+X_test = X_test.join(genre_pca_test)
 
 X_train['approval_index'] = pd.to_numeric(X_train['approval_index'], errors='coerce')  
 X_train['budget_scaled'] = pd.to_numeric(X_train['budget_scaled'], errors='coerce')
@@ -202,4 +203,7 @@ speed['CatBoost'] = np.round(time() - start, 3)
 print(f"Run time: {speed['CatBoost']}s")
 
 # -------------------- 8. Deploy the Model --------------------
+joblib.dump(robust_scaler, 'robust_scaler.pkl')
+joblib.dump(s_scaler, 'standard_scaler.pkl')
+joblib.dump(pca, 'genre_pca.pkl')
 joblib.dump(model, 'trained_box_office_analyser.pkl')
