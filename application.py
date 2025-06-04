@@ -11,6 +11,7 @@ st.write("""
 # Box Office Analyser - Worldwide Gross $ Predictor
 This application predicts the Worldwide Gross Revenue of your movie!
 """)
+st.image('https://i.pinimg.com/736x/7e/f9/26/7ef9265637be64e75208493ec390ce2b.jpg')
 
 # -------------------- Sidebar --------------------
 st.sidebar.header('Movie Details')
@@ -43,7 +44,7 @@ genres = [
 
 def user_input_features():
     budget = st.sidebar.slider('Production Budget ($)', 50000, 460000000, step=1)
-    year = st.sidebar.slider('Release Year', 1915, 2023, step=1)
+    year = st.sidebar.slider('Production Year', 1915, 2023, step=1)
     runtime_minutes = st.sidebar.slider('Movie Duration (mins)', 63, 271, step=1)
     approval_index = st.sidebar.slider('Movie Approval Index', 0.40, 10.00)
     movie_genres = st.sidebar.multiselect(label='Select Genres', options=genres)
@@ -60,10 +61,34 @@ def user_input_features():
     features = pd.DataFrame(data, index=[0])
     return features
 
+# -------------------- Body --------------------
 df = user_input_features()
-st.subheader('User Input parameters')
+st.subheader('Movie Details:')
 st.write(df)
+# st.write(f"Budget: ${df['budget'].values[0]:,.2f}")
+# st.write(f"Production Year: {df['year'].values[0]}")
+# st.write(f"Movie Duration: {df['runtime_minutes'].values[0]} Minutes")
+# st.write(f"Genres: {df['genres'].values[0]}")
+st.markdown(
+    f"""
+    <div style='display: flex; justify-content: space-between;'>
+        <strong>Budget:</strong> <span>${df['budget'].values[0]:,.2f}</span>
+    </div>
+    <div style='display: flex; justify-content: space-between;'>
+        <strong>Production Year:</strong> <span>{df['year'].values[0]}</span>
+    </div>
+    <div style='display: flex; justify-content: space-between;'>
+        <strong>Movie Duration:</strong> <span>{df['runtime_minutes'].values[0]} Minutes</span>
+    </div>
+    <div style='display: flex; justify-content: space-between;'>
+        <strong>Genres:</strong> <span>{df['genres'].values[0]}</span>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
+
+# -------------------- Data Processing --------------------
 robust_scaler = joblib.load('robust_scaler.pkl')
 s_scaler = joblib.load('standard_scaler.pkl')
 pca = joblib.load('genre_pca.pkl')
@@ -88,7 +113,7 @@ del df['genres']
 new_data = pd.DataFrame(pca.transform(genre_vector), columns=['pc1', 'pc2', 'pc3', 'pc4', 'pc5'])
 df = pd.DataFrame(df).join(new_data)
 
+# -------------------- Output --------------------
 prediction = model.predict(df)
 
-st.subheader('Predicted Worldwide Gross $')
-st.write(prediction[0])
+st.subheader(f'Predicted Worldwide Gross: ${prediction[0]:,.2f}')
