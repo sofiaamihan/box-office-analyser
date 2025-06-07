@@ -15,6 +15,12 @@ The Box Office Analyser Repository includes several key features designed to pro
 - **User-Friendly Interface**: A Streamlit-based application that enables users to input movie data and receive instant predictions and insights.
 - **Exploratory Data Analysis (EDA)**: Provides visualisations and statistics to explore the dataset, helping users identify trends and patterns in movie performance.
 
+## Comparison with Deployment Extract 
+| Actual Gross Revenue ($)     | Predicted Gross Revenue ($)     | Percentage Difference (%)     |
+|------------------------------|---------------------------------|-------------------------------|
+| 17, 475, 475                 | 22, 152, 180.67                 | 26.8                          |
+| 53, 191, 101                 | 58, 329, 482.08                 | 9.6                           |
+
 ## Packages
 - `pandas`: For data manipulation and analysis.
 - `numpy`: For numerical operations and handling arrays.
